@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>flowJS demo8</title>
+</head>
+<body>
+</body>
+<script type="text/javascript" src="./flowJS.js"></script>
+<script type="text/javascript">
+flowJS({
+    init:function(){
+        //这里B1、B2、B3会并发执行，当且仅当三个步骤都调用了this.next()后，下一步才会执行
+        this.setNext('步骤A').setNext(['步骤B1', '步骤B2', '步骤B3']).setNext('步骤C');
+        this.next();
+    },
+    '步骤A':function(){
+        console.log('执行 步骤A');
+        this.next();
+    },
+    '步骤B1':function(){
+        var self = this;
+        console.log('执行 步骤B1 时间：' + new Date().getSeconds());
+        setTimeout(function(){
+            self.nextData({name1:'value1'});
+            self.next();
+        }, 1000);
+    },
+    '步骤B2':function(){
+        var self = this;
+        console.log('执行 步骤B2 时间：' + new Date().getSeconds());
+        setTimeout(function(){
+            self.nextData({name2:'value2'});
+            self.next();
+        }, 2000);
+    },
+    '步骤B3':function(){
+        var self = this;
+        console.log('执行 步骤B3 时间：' + new Date().getSeconds());
+        setTimeout(function(){
+            self.nextData({name3:'value3'});
+            self.next();
+        }, 3000);
+    },
+    '步骤C':function(){
+        console.log('步骤C 获取上一步传来的数据：')
+        console.log(this.stepData()); //打印结果：Object {name1: "value1", name2: "value2", name3: "value3"}
+        //这里打印的时间会比前面3个的时间晚3秒（其实就是取前面3个耗时的最大值）
+        console.log('执行 步骤C 时间：' + new Date().getSeconds()); 
+    }
+});
+</script>
+</html>

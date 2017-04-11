@@ -1,0 +1,29 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>flowJS demo3</title>
+</head>
+<body>
+</body>
+<script type="text/javascript" src="./flowJS.js"></script>
+<script type="text/javascript">
+flowJS({
+    init:function(){
+        this.setNext('步骤A').setNext('步骤B').setNext('步骤C');
+        this.next();
+    },
+    '步骤A':function(){
+        this.next();
+    },
+    '步骤B':function(){
+        console.log('上一步：'+this.getPrev()); //打印结果：步骤A
+        console.log('当前步：'+this.getCurr()); //打印结果：步骤B
+        console.log('下一步：'+this.getNext()); //打印结果：步骤C
+        this.next();
+    },
+    '步骤C':function(){
+    }
+});
+</script>
+</html>
